@@ -1,0 +1,11 @@
+\f0\fs24 \cf0 #  Viewpoint Datalabs International, Inc.  Copyright 1996\
+\
+\
+mtllib ./vp.mtl\
+\
+g\
+v 1.0 1.0 1.0\
+\
+g shroud\
+f 5049 5019 5021 5033 5035 4907 4909 5047
+f 4951 4935 4937 4963 4965 4879 4881 4949

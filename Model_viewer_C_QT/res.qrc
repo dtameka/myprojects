@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>res/images/icon.png</file>
+        <file>res/images/setting.png</file>
+        <file>res/images/colorpicker.png</file>
+        <file>res/images/appico.ico</file>
+        <file>res/images/appico.icns</file>
+    </qresource>
+    <qresource prefix="/fonts">
+        <file>res/fonts/roboto-regular.ttf</file>
+    </qresource>
+</RCC>

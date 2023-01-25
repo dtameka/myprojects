@@ -1,0 +1,182 @@
+#include <stdlib.h>
+#include <check.h>
+#include <stdio.h>
+#include "parser.h"
+
+
+#suite s21_3Dviewer
+
+#tcase s21_parser
+#test s21_parser_test_1
+   char *path = "test.obj";
+   double *vertices;
+   int *indices;
+   int vArr;
+   int iArr;
+   int i;
+   int v;
+   int flag;
+   flag = parse_object_file(path, &vertices, &indices, &vArr, &iArr, &v, &i);
+
+   ck_assert_double_eq_tol(vertices[0], 2.738726, 0.0000001);
+   ck_assert_double_eq_tol(vertices[5], -2.412640, 0.0000001);
+   ck_assert_double_eq_tol(vertices[9], 2.754726, 0.0000001);
+   ck_assert_double_eq_tol(vertices[23], -2.474640, 0.0000001);
+
+   ck_assert_int_eq(indices[0], 2563);
+   ck_assert_int_eq(indices[12], 5263);
+   ck_assert_int_eq(indices[24], 963);
+   ck_assert_int_eq(indices[49], 7431);
+
+   ck_assert_int_eq(flag, 0);
+   ck_assert_int_eq(vArr, 30);
+   ck_assert_int_eq(iArr, 60);
+   free(vertices);
+   free(indices);
+#test s21_moveX_test_2
+   char *path = "test2.obj";
+   double *vertices;
+   int *indices;
+   int vArr;
+   int iArr;
+   int i;
+   int v;
+   int flag;
+   flag = parse_object_file(path, &vertices, &indices, &vArr, &iArr, &v, &i);
+   moveMatrix(vertices, &vArr, 1.5, 0.0, 0.0);
+
+   ck_assert_float_eq_tol(vertices[0], 2.5, 0.0000001);
+
+   free(vertices);
+   free(indices);
+#test s21_moveY_test_3
+   char *path = "test2.obj";
+   double *vertices;
+   int *indices;
+   int vArr;
+   int iArr;
+   int i;
+   int v;
+   int flag;
+   flag = parse_object_file(path, &vertices, &indices, &vArr, &iArr, &v, &i);
+   moveMatrix(vertices, &vArr, 0.0, 1.5, 0.0);
+
+   ck_assert_float_eq_tol(vertices[1], 2.5, 0.0000001);
+
+   free(vertices);
+   free(indices);
+#test s21_moveZ_test_4
+   char *path = "test2.obj";
+   double *vertices;
+   int *indices;
+   int vArr;
+   int iArr;
+   int i;
+   int v;
+   int flag;
+   flag = parse_object_file(path, &vertices, &indices, &vArr, &iArr, &v, &i);
+   moveMatrix(vertices, &vArr, 0.0, 0.0, 1.5);
+
+   ck_assert_float_eq_tol(vertices[2], 2.5, 0.0000001);
+
+   free(vertices);
+   free(indices);
+#test s21_rotateX_test_5
+   char *path = "test2.obj";
+   double *vertices;
+   int *indices;
+   int vArr;
+   int iArr;
+   int i;
+   int v;
+   int flag;
+   flag = parse_object_file(path, &vertices, &indices, &vArr, &iArr, &v, &i);
+   rotateMatrix(vertices, &vArr, 1.5, 0.0, 0.0);
+
+   ck_assert_float_eq_tol(vertices[1], 1.06823, 0.00001);
+   ck_assert_float_eq_tol(vertices[2], -0.92675, 0.00001);
+
+   free(vertices);
+   free(indices);
+#test s21_rotateY_test_6
+   char *path = "test2.obj";
+   double *vertices;
+   int *indices;
+   int vArr;
+   int iArr;
+   int i;
+   int v;
+   int flag;
+   flag = parse_object_file(path, &vertices, &indices, &vArr, &iArr, &v, &i);
+   rotateMatrix(vertices, &vArr, 0.0, 1.5, 0.0);
+
+   ck_assert_float_eq_tol(vertices[0], -0.92675, 0.00001);
+   ck_assert_float_eq_tol(vertices[2], 1.06823, 0.00001);
+
+   free(vertices);
+   free(indices);
+#test s21_rotateY_test_7
+   char *path = "test2.obj";
+   double *vertices;
+   int *indices;
+   int vArr;
+   int iArr;
+   int i;
+   int v;
+   int flag;
+   flag = parse_object_file(path, &vertices, &indices, &vArr, &iArr, &v, &i);
+   rotateMatrix(vertices, &vArr, 0.0, 0.0, 1.5);
+
+   ck_assert_float_eq_tol(vertices[0], -0.92675, 0.00001);
+   ck_assert_float_eq_tol(vertices[1], 1.06823, 0.00001);
+
+   free(vertices);
+   free(indices);
+#test s21_scale_test_8
+   char *path = "test2.obj";
+   double *vertices;
+   int *indices;
+   int vArr;
+   int iArr;
+   int i;
+   int v;
+   int flag;
+   flag = parse_object_file(path, &vertices, &indices, &vArr, &iArr, &v, &i);
+   scaleMatrix(vertices, &vArr, 2.0, 2.0, 2.0);
+
+   ck_assert_float_eq_tol(vertices[0], 2.0, 0.00001);
+   ck_assert_float_eq_tol(vertices[1], 2.0, 0.00001);
+   ck_assert_float_eq_tol(vertices[2], 2.0, 0.00001);
+
+   free(vertices);
+   free(indices);
+#test s21_minmax_test_9
+   char *path = "test2.obj";
+   double *vertices;
+   int *indices;
+   int vArr;
+   int iArr;
+   int i;
+   int v;
+   int flag;
+   double min, max;
+   flag = parse_object_file(path, &vertices, &indices, &vArr, &iArr, &v, &i);
+   min_max(vertices, &min, &max, vArr);
+
+   ck_assert_float_eq_tol(min, 1.0, 0.00001);
+   ck_assert_float_eq_tol(max, 1.0, 0.00001);
+
+   free(vertices);
+   free(indices);
+#test s21_parser_test_10
+   char *path = "null.obj";
+   double *vertices;
+   int *indices;
+   int vArr;
+   int iArr;
+   int i;
+   int v;
+   int flag;
+   flag = parse_object_file(path, &vertices, &indices, &vArr, &iArr, &v, &i);
+
+   ck_assert_int_eq(flag, 1);
