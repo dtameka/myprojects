@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/resources">
+        <file>img/SmartCalc2.png</file>
+        <file>img/SmartCalc3.png</file>
+        <file>img/Ad.png</file>
+    </qresource>
+</RCC>
