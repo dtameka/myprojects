@@ -1,0 +1,16 @@
+HOSTNAME        = ws1
+TIMEZONE        = Etc/UTC UTC +0000
+USER            = root
+OS              = -Ubuntu
+DATE            = 20 Feb 2022 01:54:46
+UPTIME          = up 10 minutes
+UPTIME_SEC      = 640
+IP              = 10.0.2.15
+MASK            = 255.255.255.0
+GATEWAY         = 10.0.2.2
+RAM_TOTAL       = 0.954 Gb
+RAM_USED        = 0.153 Gb
+RAM_FREE        = 0.430 Gb
+SPACE_ROOT      = 9003.33 Mb
+SPACE_ROOT_USED = 4495.09 Mb
+SPACE_ROOT_FREE = 4031.64 Mb

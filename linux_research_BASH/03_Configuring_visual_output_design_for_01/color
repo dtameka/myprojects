@@ -1,0 +1,159 @@
+#!/bin/bash
+
+function color {  
+    export default
+    if [[ -f ./color.conf ]]
+    then
+        default=0
+    else
+        default=1
+    fi
+#Check .conf file
+    if [[ ${default} = 0 ]]
+    then
+        argument1=$(grep column1_background color.conf | awk -F'[=]' '{print $2}')
+        argument2=$(grep column1_font_color color.conf | awk -F'[=]' '{print $2}')
+        argument3=$(grep column2_background color.conf | awk -F'[=]' '{print $2}')
+        argument4=$(grep column2_font_color color.conf | awk -F'[=]' '{print $2}')
+    fi
+#Set default if non args if .conf
+    if [[ ${argument1} = '' ]] || [[ ${argument2} = '' ]] || [[ ${argument3} = '' ]] || [[ ${argument4} = '' ]]
+    then
+        default_color=1
+    fi
+#Set default if argument matches
+    if [[ ${argument1} = ${argument2} ]] || [[ ${argument3} = ${argument4} ]]
+    then
+        default_color=1
+    fi
+#Set color scheme with .conf
+    export background_color_1_tag
+    export font_color_1_tag
+    export background_color_2_tag
+    export font_color_2_tag
+    if [[ ${default} = 0 ]]
+    then
+        case ${argument1} in
+        1 )
+        background_color_1=47
+        background_color_1_tag=' (white)'
+        ;;
+        2 )
+        background_color_1=41
+        background_color_1_tag=' (red)'
+        ;;
+        3 )
+        background_color_1=42
+        background_color_1_tag=' (green)'
+        ;;
+        4 )
+        background_color_1=44
+        background_color_1_tag=' (blue)'
+        ;;
+        5 )
+        background_color_1=45
+        background_color_1_tag=' (purple)'    
+        ;;
+        6 )
+        background_color_1=40
+        background_color_1_tag=' (black)'
+        ;;
+        esac
+
+        case ${argument2} in
+        1 )
+        font_color_1=37
+        font_color_1_tag=' (white)'
+        ;;
+        2 )
+        font_color_1=31
+        font_color_1_tag=' (red)'
+        ;;
+        3 )
+        font_color_1=32
+        font_color_1_tag=' (green)'
+        ;;
+        4 )
+        font_color_1=34
+        font_color_1_tag=' (blue)'
+        ;;
+        5 )
+        font_color_1=35
+        font_color_1_tag=' (purple)'
+        ;;
+        6 )
+        font_color_1=30
+        font_color_1_tag=' (black)'
+        ;;
+        esac
+
+        case ${argument3} in
+        1 )
+        background_color_2=47
+        background_color_2_tag=' (white)'
+        ;;
+        2 )
+        background_color_2=41
+        background_color_2_tag=' (red)'
+        ;;
+        3 )
+        background_color_2=42
+        background_color_2_tag=' (green)'    
+        ;;
+        4 )
+        background_color_2=44
+        background_color_2_tag=' (blue)'    
+        ;;
+        5 )
+        background_color_2=45
+        background_color_2_tag=' (purple)'
+        ;;
+        6 )
+        background_color_2=40
+        background_color_2_tag=' (black)'   
+        ;;
+        esac
+
+        case ${argument4} in
+        1 )
+        font_color_2=37
+        font_color_2_tag=' (white)'
+        ;;
+        2 )
+        font_color_2=31
+        font_color_2_tag=' (red)'
+        ;;
+        3 )
+        font_color_2=32
+        font_color_2_tag=' (green)'
+        ;;
+        4 )
+        font_color_2=34
+        font_color_2_tag=' (blue)'
+        ;;
+        5 )
+        font_color_2=35
+        font_color_2_tag=' (purple)'
+        ;;
+        6 )
+        font_color_2=30
+        font_color_2_tag=' (black)'
+        ;;
+        esac
+    else
+        background_color_1=40     # 1 - black
+        background_color_1_tag=' (black)'
+        font_color_1=37           # 6 - white
+        font_color_1_tag=' (white)'
+        background_color_2=40     # 1 - black
+        background_color_2_tag=' (black)'
+        font_color_2=37           # 6 - white
+        font_color_2_tag=' (white)'
+    fi
+#Set color schemes and padding (value column width)
+    export color_scheme_1="\0033["${font_color_1}";"${background_color_1}"m"
+    export color_scheme_2="\0033["${font_color_2}";"${background_color_2}"m"
+    export clear="\0033[0m"
+    export column_width=40
+    export carry=$(printf %${column_width}s)
+}

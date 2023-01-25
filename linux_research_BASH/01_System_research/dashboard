@@ -1,0 +1,84 @@
+#!/bin/bash
+
+function dashboard {
+
+    if [[ $(uname -s) =  Linux ]]
+    then
+        #1.HOSTNAME
+        hostname=$(hostname)
+        #2.TIMEZONE
+        area=$(ls  -lha /etc/localtime | awk -F'[/]' '{print $7}')
+        city=$(ls  -lha /etc/localtime | awk -F'[/]' '{print $8}')
+        utc=$(date +"%z")
+        timezone=${area}"/"${city}" "UTC" "${utc}
+        #3.USER
+        user=$(whoami)
+        #4.OS
+        os=$(uname -a | awk '{print $4}' | cut -c5-18)
+        #5.DATE
+        date=$(date | awk '{print $2" "$3" "$4" "$5}')
+        #6.UPTIME
+        uptime=$(uptime -p)
+        #7.UPTIME_SEC
+        uptime_sec=$(cat /proc/uptime | awk '{printf "%0.f", $1}')
+        #8.IP
+        ip=$(hostname -I | awk '{print $1}')
+        #9.MASK
+        mask=$(ifconfig | grep "inet " | grep -Fv 127.0.0.1 | head -n1 | awk '{print $4}')
+        #10.GATEWAY
+        gateway=$(netstat -nr | grep G | tail -n1 | awk '{print $2}')
+        #11.RAM_TOTAL
+        ram_total=$(free | grep Mem: | awk '{print $2 / 1024 / 1024 }' OFMT="%.3f Gb")
+        #12.RAM_USED
+        ram_used=$(free | grep Mem: | awk '{print $3 / 1024 / 1024 }' OFMT="%.3f Gb")
+        #13.RAM_FREE
+        ram_free=$(free | grep Mem: | awk '{print $4 / 1024 / 1024 }' OFMT="%.3f Gb")
+        #14.SPACE_ROOT
+        space_root=$(df -k / | tail -n1 | awk '{print $2 / 1024 }' OFMT="%.2f Mb")
+        #15.SPACE_ROOT_USED
+        space_root_used=$(df -k / | tail -n1 | awk '{print $3 / 1024 }' OFMT="%.2f Mb")
+        #16.SPACE_ROOT_FREE
+        space_root_free=$(df -k / | tail -n1 | awk '{print $4 / 1024 }' OFMT="%.2f Mb")
+    elif [[ $(uname -s) =  Darwin ]]
+    then
+        #1.HOSTNAME
+        hostname=$(hostname)
+        #2.TIMEZONE
+        area=$(ls  -lha /etc/localtime | awk -F'[/]' '{print $8}')
+        city=$(ls  -lha /etc/localtime | awk -F'[/]' '{print $9}')
+        utc=$(date +"%z")
+        timezone=${area}"/"${city}" "UTC" "${utc}
+        #3.USER
+        user=$(whoami)
+        #4.OS
+        os=$(uname -a | awk '{print $1" " $6" "$7}' | cut -c1-21)
+        #5.DATE
+        date=$(date | awk '{print $2}')" "$(date | awk '{print $3}')" "$(date | awk '{print $4}')" "$(date | awk '{print $5}')
+        #6.UPTIME
+        uptime=$(uptime | awk '{print $2" "$3" "$4}')" "$(uptime | awk '{print $5}' | sed s/,//)
+        #7.UPTIME_SEC
+        uptime_sec=$(sysctl -n kern.boottime | cut -f4 -d' ' | cut -d',' -f1)
+        #8.IP
+        ip=$(ifconfig | grep "inet " | grep -Fv 127.0.0.1 | awk '{print $2}' )
+        #9.MASK
+        mask=$(ifconfig | grep "inet " | grep -Fv 127.0.0.1 | head -n1 | awk '{print $4}')
+        #10.GATEWAY
+        gateway=$(netstat -nr | grep G | head -n2 | tail -n1 | awk '{print $2}')
+        #11.RAM_TOTAL
+        ram_total=$(sysctl -n hw.memsize | awk '{printf "%.3f Gb", $1 / 1024 / 1024 / 1024 }')
+        #12.RAM_USED
+        ram_used=$(printf "%.3f Gb"\\n $(awk "BEGIN {print ($(top -l 1 | awk '/PhysMem:/ {print $4}' | sed "s/M//" | sed s/\(// ))/1024}"))
+        #13.RAM_FREE
+        free_blocks=$(vm_stat | grep free | awk '{ print $3 }' | sed 's/\.//')
+        inactive_blocks=$(vm_stat | grep inactive | awk '{ print $3 }' | sed 's/\.//')
+        speculative_blocks=$(vm_stat | grep speculative | awk '{ print $3 }' | sed 's/\.//')
+        total_free_memory=$((($free_blocks+$inactive_blocks+$speculative_blocks)*4096/1048576))
+        ram_free=$(echo $total_free_memory | awk '{printf "%.3f Gb", $1 / 1024}')
+        #14.SPACE_ROOT
+        space_root=$(df -k / | tail -n1 | awk '{print $2 / 1024 }' OFMT="%.2f Mb")
+        #15.SPACE_ROOT_USED
+        space_root_used=$(df -k / | tail -n1 | awk '{print $3 / 1024 }' OFMT="%.2f Mb")
+        #16.SPACE_ROOT_FREE
+        space_root_free=$(df -k / | tail -n1 | awk '{print $4 / 1024 }' OFMT="%.2f Mb")
+    fi
+}

@@ -1,0 +1,38 @@
+#!/bin/bash
+
+#Output results to a file (with a unique name)
+function result {
+    SAVEIFS=${IFS}
+    IFS=""
+    echo "Total number of folders (including all nested ones) = ${number_of_folders}"
+    echo
+    echo "TOP 5 folders of maximum size arranged in descent order (path and size):"
+    echo "${top5_folders}"
+    echo
+    echo "Total number of files = ${number_of_files}"
+    echo "Number of:"
+    echo "Configuration files (with the .conf extension) = ${number_of_configuration_files}"
+    echo "Text files = ${number_of_text_files}"
+    echo "Executable files = ${number_of_executable_files}"
+    echo "Log files (with the extension .log) = ${number_of_log_files}"
+    echo "Archive files = ${number_of_archive_files}"
+    echo "Symbolic links = ${number_of_symbolic_links}"
+    echo
+    echo "TOP 10 files of the maxmum size arranged in descending order (path, size and type):"
+    echo "${top10_files}"
+    echo
+    echo "TOP 10 executable files of the maximum size arranged in descending order (path, size and MD5 hash of file):"
+    echo "${top10_executable_files}"
+    echo
+    if [[ $(uname -s) =  Linux ]]
+    then
+        end_time=$(date +%s.%N)
+    elif [[ $(uname -s) =  Darwin ]]
+    then
+        end_time=$(date +%s)
+    fi
+    dt=$(echo "${end_time} - ${start_time}" | bc)
+    run_time=$(printf "%02.1f" ${dt})
+    echo "Script execution time (in seconds) = ${run_time}"
+    IFS=${SAVEIFS}
+}

@@ -1,0 +1,100 @@
+#!/bin/bash
+
+function dashboard {
+    if [[ $(uname -s) =  Linux ]]
+    then
+        export start_time=$(date +%s.%N)
+        clear
+        folder_start=$folder*/
+        export number_of_folders=$(ls -lR $folder 2>/dev/null | grep ^d | wc -l)
+        export top5_folders=$(du -b $folder_start 2>/dev/null | sort -nr | head -5 | \
+        awk -F"\t" '{ if($1>=1024*1024*1024*1024) {size=$1/1024/1024/1024/1024; unit=" Tb"} \
+        else if($1>=1024*1024*1024) {size=$1/1024/1024/1024; unit=" Gb"} \
+        else if($1>=1024*1024) {size=$1/1024/1024; unit=" Mb"} \
+        else if($1>1024) {size=$1/1024; unit=" Kb"} \
+        else {size=$1; unit=" b"}; \
+        if(size<10) format="%.1f%s"; else format="%.0f%s"; \
+        res=sprintf(format,size,unit); printf "%d - %s, %s \n", NR , $2, res}')
+        export number_of_files=$(ls -lR $folder 2>/dev/null | grep -c '^-')
+        export number_of_configuration_files=$(ls -lhaFR $folder 2>/dev/null | grep -c '.conf')
+        export number_of_text_files=$(ls -lhaFR $folder 2>/dev/null | grep -c '.txt')
+        export number_of_executable_files=$(ls -lhaFR $folder 2>/dev/null | grep -c '^-........x')
+        export number_of_log_files=$(ls -lhaFR $folder 2>/dev/null | grep -c '.log')
+        export number_of_archive_files=$(( $(ls -lhaFR $folder 2>/dev/null | grep -c '.tar') + \
+        $(ls -lhaFR $folder 2>/dev/null | grep -c '.gz') + \
+        $(ls -lhaFR $folder 2>/dev/null | grep -c '.zip') + \
+        $(ls -lhaFR $folder 2>/dev/null | grep -c '.iso') + \
+        $(ls -lhaFR $folder 2>/dev/null | grep -c '.7z') + \
+        $(ls -lhaFR $folder 2>/dev/null | grep -c '.arj') + \
+        $(ls -lhaFR $folder 2>/dev/null | grep -c '.rar') ))
+        export number_of_symbolic_links=$(ls -lhaFR $folder 2>/dev/null | grep -c ^l)
+        export top10_files=$(find $folder -type f -printf '%s\t%p\n' 2>/dev/null | sort -nr | head -10 | \
+        awk -F"\t" '{ if($1>=1024*1024*1024*1024) {size=$1/1024/1024/1024/1024; unit=" Tb"} \
+        else if($1>=1024*1024*1024) {size=$1/1024/1024/1024; unit=" Gb"} \
+        else if($1>=1024*1024) {size=$1/1024/1024; unit=" Mb"} \
+        else if($1>1024) {size=$1/1024; unit=" Kb"} \
+        else {size=$1; unit=" b"}; \
+        if(size<10) format="%.1f%s"; else format="%.0f%s"; \
+        res=sprintf(format,size,unit); var=$2; n=split(var,a,"."); m=2; if(n>1) {m=n}; \
+        printf "%d - %s, %s, %s\n", NR , $2, res, a[m]}')
+        export top10_executable_files=$(find $folder -executable -type f -printf "%s\t%p\t" \
+        -exec bash -c 'md=$(md5sum "$0"); echo ${md:0:32};' {} \; 2>/dev/null | sort -nr | head -10 | \
+        awk -F"\t" '{ if($1>=1024*1024*1024*1024) {size=$1/1024/1024/1024/1024; unit=" Tb"} \
+        else if($1>=1024*1024*1024) {size=$1/1024/1024/1024; unit=" Gb"} \
+        else if($1>=1024*1024) {size=$1/1024/1024; unit=" Mb"} \
+        else if($1>1024) {size=$1/1024; unit=" Kb"} \
+        else {size=$1; unit=" b"}; \
+        if(size<10) format="%.1f%s"; else format="%.0f%s"; \
+        res=sprintf(format,size,unit); \
+        printf "%d - %s, %s, %s\n", NR , $2, res, $3}')
+        clear
+    elif [[ $(uname -s) =  Darwin ]]
+    then
+        export start_time=$(date +%s)
+        clear
+        folder_start=$folder*
+        export number_of_folders=$(ls -laFR $folder 2>/dev/null | grep -c ^d)
+        export top5_folders=$(du -k $folder 2>/dev/null | sort -nr | head -5 | sed s'~\//~\/~' | \
+        awk -F"\t" '{ if($1>=1024*1024*1024) {size=$1/1024/1024/1024; unit=" Tb"} \
+        else if($1>=1024*1024) {size=$1/1024/1024; unit=" Gb"} \
+        else if($1>=1024) {size=$1/1024; unit=" Mb"} \
+        else {size=$1; unit=" Kb"}; \
+        if(size<10) format="%.1f%s"; else format="%.0f%s"; \
+        res=sprintf(format,size,unit); printf "%d - %s, %s \n", NR , $2, res}')
+        export number_of_files=$(ls -lR $folder 2>/dev/null | grep -c '^-')
+        export number_of_configuration_files=$(ls -lhaFR $folder 2>/dev/null | grep -c '.conf')
+        export number_of_text_files=$(ls -lhaFR $folder 2>/dev/null | grep -c '.txt')
+        export number_of_executable_files=$(ls -lhaFR $folder 2>/dev/null | grep -c '^-........x')
+        export number_of_log_files=$(ls -lhaFR $folder 2>/dev/null | grep -c '.log')
+        export number_of_archive_files=$(( $(ls -lhaFR $folder 2>/dev/null | grep -c '.tar') + \
+        $(ls -lhaFR $folder 2>/dev/null | grep -c '.gz') + \
+        $(ls -lhaFR $folder 2>/dev/null | grep -c '.zip') + \
+        $(ls -lhaFR $folder 2>/dev/null | grep -c '.iso') + \
+        $(ls -lhaFR $folder 2>/dev/null | grep -c '.7z') + \
+        $(ls -lhaFR $folder 2>/dev/null | grep -c '.arj') + \
+        $(ls -lhaFR $folder 2>/dev/null | grep -c '.rar') ))
+        export number_of_symbolic_links=$(ls -lhaFR $folder 2>/dev/null | grep -c ^l)
+        export top10_files=$(find $folder_start -type f -exec ls -laFR {} \; 2>/dev/null | \
+        sed s'/*//' | awk '{print $5"\t"$9}' | sort -nr | head -10 | \
+        awk -F"\t" '{ if($1>=1024*1024*1024*1024) {size=$1/1024/1024/1024/1024; unit=" Tb"} \
+        else if($1>=1024*1024*1024) {size=$1/1024/1024/1024; unit=" Gb"} \
+        else if($1>=1024*1024) {size=$1/1024/1024; unit=" Mb"} \
+        else if($1>1024) {size=$1/1024; unit=" Kb"} \
+        else {size=$1; unit=" b"}; \
+        if(size<10) format="%.1f%s"; else format="%.0f%s"; \
+        res=sprintf(format,size,unit); var=$2; n=split(var,a,"."); m=2; if(n>1) {m=n}; \
+        printf "%d - %s, %s, %s\n", NR , $2, res, a[m]}')
+        export top10_executable_files=$(find $folder_start -perm +111 -type f -exec bash -c 'md=$(md5 -r "$0"); \
+        size=$(ls -laFR "$0"); echo "${md}" "${size}"' {} \; \
+        2>/dev/null | awk '{print $7"\t"$2"\t"$1}' | sort -nr | head -10 | \
+        awk -F"\t" '{ if($1>=1024*1024*1024*1024) {size=$1/1024/1024/1024/1024; unit=" Tb"} \
+        else if($1>=1024*1024*1024) {size=$1/1024/1024/1024; unit=" Gb"} \
+        else if($1>=1024*1024) {size=$1/1024/1024; unit=" Mb"} \
+        else if($1>1024) {size=$1/1024; unit=" Kb"} \
+        else {size=$1; unit=" b"}; \
+        if(size<10) format="%.1f%s"; else format="%.0f%s"; \
+        res=sprintf(format,size,unit); \
+        printf "%d - %s, %s, %s\n", NR , $2, res, $3}')
+        clear
+    fi
+}

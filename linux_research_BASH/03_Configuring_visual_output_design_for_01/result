@@ -1,0 +1,44 @@
+#!/bin/bash
+
+#Output results to screen
+function result {
+    export dashboard=$(
+        echo -e "${color_scheme_1}HOSTNAME         ${clear} = ${color_scheme_2}${hostname:0:${column_width}}${clear}"
+        echo -e "${color_scheme_1}TIMEZONE         ${clear} = ${color_scheme_2}${timezone:0:${column_width}}${clear}"
+        echo -e "${color_scheme_1}USER             ${clear} = ${color_scheme_2}${user:0:${column_width}}${clear}"
+        echo -e "${color_scheme_1}OS               ${clear} = ${color_scheme_2}${os:0:${column_width}}${clear}"
+        echo -e "${color_scheme_1}DATE             ${clear} = ${color_scheme_2}${date:0:${column_width}}${clear}"
+        echo -e "${color_scheme_1}UPTIME           ${clear} = ${color_scheme_2}${uptime:0:${column_width}}${clear}"
+        echo -e "${color_scheme_1}UPTIME_SEC       ${clear} = ${color_scheme_2}${uptime_sec:0:${column_width}}${clear}"
+        echo -e "${color_scheme_1}IP               ${clear} = ${color_scheme_2}${ip:0:${column_width}}${clear}"
+        echo -e "${color_scheme_1}MASK             ${clear} = ${color_scheme_2}${mask:0:${column_width}}${clear}"
+        echo -e "${color_scheme_1}GATEWAY          ${clear} = ${color_scheme_2}${gateway:0:${column_width}}${clear}"
+        echo -e "${color_scheme_1}RAM_TOTAL        ${clear} = ${color_scheme_2}${ram_total:0:${column_width}}${clear}"
+        echo -e "${color_scheme_1}RAM_USED         ${clear} = ${color_scheme_2}${ram_used:0:${column_width}}${clear}"
+        echo -e "${color_scheme_1}RAM_FREE         ${clear} = ${color_scheme_2}${ram_free:0:${column_width}}${clear}"
+        echo -e "${color_scheme_1}SPACE_ROOT       ${clear} = ${color_scheme_2}${space_root:0:${column_width}}${clear}"
+        echo -e "${color_scheme_1}SPACE_ROOT_USED  ${clear} = ${color_scheme_2}${space_root_used:0:${column_width}}${clear}"
+        echo -e "${color_scheme_1}SPACE_ROOT_FREE  ${clear} = ${color_scheme_2}${space_root_free:0:${column_width}}${clear}"
+    )
+    clear
+    SAVEIFS=${IFS}
+    IFS=""
+    echo ${dashboard}
+
+    if [[ ${default} = 0 ]]
+    then
+        echo
+        echo -e "Column 1 background = ${argument1}${background_color_1_tag}"
+        echo -e "Column 1 font color = ${argument2}${font_color_1_tag}"
+        echo -e "Column 2 background = ${argument3}${background_color_2_tag}"
+        echo -e "Column 2 font color = ${argument4}${font_color_2_tag}"                
+    else
+        echo
+        echo -e "Column 1 background = default${background_color_1_tag}"
+        echo -e "Column 1 font color = default${font_color_1_tag}"
+        echo -e "Column 2 background = default${background_color_2_tag}"
+        echo -e "Column 2 font color = default${font_color_2_tag}"                
+    fi
+
+    IFS=${SAVEIFS}
+}

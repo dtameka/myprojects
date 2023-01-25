@@ -1,0 +1,25 @@
+#!/bin/bash
+
+#Entry Logic - 'protection against a fool'
+function entry { 
+if [[ ${arguments} -eq 0 ]] || [[ ${arguments} -gt 1 ]] 
+then
+    echo "Please put folder name - the script is aborted."
+    exit -1
+else    
+    input_check=$(echo "${first_argument}" | awk '{print substr($1,length,1)}')
+    if [[ ${input_check} == "/" ]]
+    then
+        if [[ -d ${first_argument} ]]
+        then
+            export folder=${first_argument}
+        else
+            echo "Cannot open the folder - the script is aborted."
+            exit -1
+        fi
+    else
+        echo "Please enter a back-slash(/) symbol to the folder name - the script is aborted."
+        exit -1
+    fi    
+fi
+}

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+function entry {   
+    if [[ ${arguments} -gt 0 ]] 
+    then
+        echo "Dont put parameters - the script is aborted."
+        exit -1
+    fi
+}

@@ -1,0 +1,102 @@
+#!/bin/bash
+
+#Prepare colorful output based on cli argments, add a right column formatting
+function color {
+    case ${argument1} in
+    1 )
+    background_color_1=47
+    ;;
+    2 )
+    background_color_1=41
+    ;;
+    3 )
+    background_color_1=42
+    ;;
+    4 )
+    background_color_1=44
+    ;;
+    5 )
+    background_color_1=45
+    ;;
+    6 )
+    background_color_1=40
+    ;;
+    * )
+    background_color_1=40
+    esac
+
+    case ${argument2} in
+    1 )
+    font_color_1=37
+    ;;
+    2 )
+    font_color_1=31
+    ;;
+    3 )
+    font_color_1=32
+    ;;
+    4 )
+    font_color_1=34
+    ;;
+    5 )
+    font_color_1=35
+    ;;
+    6 )
+    font_color_1=30
+    ;;
+    * )
+    font_color_1=37
+    esac
+
+    case ${argument3} in
+    1 )
+    background_color_2=47
+    ;;
+    2 )
+    background_color_2=41
+    ;;
+    3 )
+    background_color_2=42
+    ;;
+    4 )
+    background_color_2=44
+    ;;
+    5 )
+    background_color_2=45
+    ;;
+    6 )
+    background_color_2=40
+    ;;
+    * )
+    background_color_2=40
+    esac
+
+    case ${argument4} in
+    1 )
+    font_color_2=37
+    ;;
+    2 )
+    font_color_2=31
+    ;;
+    3 )
+    font_color_2=32
+    ;;
+    4 )
+    font_color_2=34
+    ;;
+    5 )
+    font_color_2=35
+    ;;
+    6 )
+    font_color_2=30
+    ;;
+    * )
+    font_color_2=37
+    esac
+
+    export color_scheme_1="\0033["${font_color_1}";"${background_color_1}"m"
+    export color_scheme_2="\0033["${font_color_2}";"${background_color_2}"m"
+    export clear="\0033[0m"
+    export column_width=40
+    export carry=$(printf %${column_width}s)
+}

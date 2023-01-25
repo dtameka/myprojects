@@ -1,0 +1,54 @@
+#!/bin/bash
+
+function entry {   
+    if [[ ${arguments} -lt 4 ]] || [[ ${arguments} -gt 4 ]] 
+    then
+        echo "4 parameters, each integer from 1 to 6 - the script is aborted."
+        exit -1
+    fi
+}
+
+function match_arguments {
+pattern='*([+-])*([0-9])'
+    if [[ $1 = ${pattern} ]]
+    then
+        if [[ ${1} -le 0 ]] || [[ ${1} -ge 7 ]]
+        then
+            echo "Agrument is not in 1-6 range - the script is aborted"
+            exit -1        
+        fi        
+    else
+        echo "Agrument is not an integer - the script is aborted"
+        exit -1
+    fi    
+}
+
+export new_arguments_count=0
+function check_new_argument {
+    if  [[ ${1} -ge 1 ]]
+    then
+        new_arguments_count=$(( ${new_arguments_count} + 1 ))
+    fi
+}
+
+function color_match {
+        if [[ ${1} = ${2} ]] || [[ ${3} = ${4} ]]
+        then
+            echo "Input argumets 1 and 2 or 3 and 4 are similar. Please provide different arguments and we re-run the script"
+            echo -n "./$(basename ${5}) "
+            read new_arguments
+            new_argument1=$(echo "${new_arguments}" | awk '{print $1}')
+            check_new_argument ${new_argument1}
+            new_argument2=$(echo "${new_arguments}" | awk '{print $2}')
+            check_new_argument ${new_argument2}
+            new_argument3=$(echo "${new_arguments}" | awk '{print $3}')
+            check_new_argument ${new_argument3}
+            new_argument4=$(echo "${new_arguments}" | awk '{print $4}')
+            check_new_argument ${new_argument4}
+            new_argument5=$(echo "${new_arguments}" | awk '{print $5}')
+            check_new_argument ${new_argument5}
+            arguments=${new_arguments_count}
+            entry
+            exec "${5}" "${new_argument1}" "${new_argument2}" "${new_argument3}" "${new_argument4}" && exit 0
+        fi
+}

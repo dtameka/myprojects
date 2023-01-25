@@ -1,0 +1,49 @@
+#!/bin/bash
+
+function result {
+
+    export dashboard=$(
+        echo HOSTNAME"        = "${hostname}
+        echo TIMEZONE"        = "${timezone}
+        echo USER"            = "${user}
+        echo OS"              = "${os}
+        echo DATE"            = "${date}
+        echo UPTIME"          = "${uptime}
+        echo UPTIME_SEC"      = "${uptime_sec}
+        echo IP"              = "${ip}
+        echo MASK"            = "${mask}
+        echo GATEWAY"         = "${gateway}
+        echo RAM_TOTAL"       = "${ram_total}
+        echo RAM_USED"        = "${ram_used}
+        echo RAM_FREE"        = "${ram_free}
+        echo SPACE_ROOT"      = "${space_root}
+        echo SPACE_ROOT_USED" = "${space_root_used}
+        echo SPACE_ROOT_FREE" = "${space_root_free}
+    )
+
+clear
+export SAVEIFS=${IFS}
+IFS=""
+echo ${dashboard}
+echo
+echo "Do you want to save the screen output into a file? (Y/N)"
+
+yes_small='y'
+yes_big='Y'
+read otvet
+
+    if [[ "${otvet}" = "${yes_small}" ]] || [[ "${otvet}" = "${yes_big}" ]]
+    then
+        if [ -f *.status ]
+        then
+            rm *.status
+        fi
+        echo ${dashboard} > $(date +"%Y_%m_%d_%H_%M_%S".status)
+        echo "The screenshot is successfully saved"
+        IFS=${SAVEIFS}
+    else
+        echo "The script is finished."        
+        IFS=${SAVEIFS}
+        exit -1
+    fi
+}

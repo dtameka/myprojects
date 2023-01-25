@@ -1,0 +1,9 @@
+#!/bin/bash
+
+function entry {
+    if [[ ${#} -gt 0 ]]
+    then
+        echo "Please don't put arguments"
+        exit -1
+    fi
+}
