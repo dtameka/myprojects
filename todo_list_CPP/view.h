@@ -1,18 +1,6 @@
 #include <iostream>
 #include <vector>
-
-enum status {
- start = 0,
- completed,
- failed
-};
-
-class Data {
-  int taskId;
-  std::string taskName;
-  std::vector<std::pair<int, status>> taskStatus;
-  std::string taskDuration;
-};
+#include "controller.hpp"
 
 class IScreen {
   public:
@@ -30,11 +18,13 @@ class MainScreen : public IScreen {
   std::cout << "|------------------------|" << std::endl;
   std::cout << "|[1] - Добавить задачу   |" << std::endl;
   std::cout << "|------------------------|" << std::endl;
-  std::cout << "|[2] - Удалить задачу    |" << std::endl;
+  std::cout << "|[2] - Все задачи        |" << std::endl;
   std::cout << "|------------------------|" << std::endl;
-  std::cout << "|[3] - Начатые задачи    |" << std::endl;
+  std::cout << "|[3] - Найти задачу      |" << std::endl;
   std::cout << "|------------------------|" << std::endl;
-  std::cout << "|[4] - Законченые задачи |" << std::endl;
+  std::cout << "|[4] - Удалить задачу    |" << std::endl;
+  std::cout << "|------------------------|" << std::endl;
+  std::cout << "|[5] - Удалить всё       |" << std::endl;
   std::cout << "|------------------------|" << std::endl;
   std::cout << "|[x] - Выход             |" << std::endl;
   std::cout << "|------------------------|" << std::endl;
@@ -44,7 +34,7 @@ class MainScreen : public IScreen {
 
 class AddScreen : public IScreen {
   public:
-  AddScreen(Data *data) : data_(data) {}
+  AddScreen() {}
   ~AddScreen() {}
   void paint() override {
   std::cout << "|------------------------|" << std::endl;
@@ -52,20 +42,12 @@ class AddScreen : public IScreen {
   std::cout << "| Создание новой задачи  |" << std::endl;
   std::cout << "|                        |" << std::endl;
   std::cout << "|------------------------|" << std::endl;
-  std::cout << "|[1] - Название задачи   |" << std::endl;
-  std::cout << "|------------------------|" << std::endl;
-  std::cout << "|[2] - До какого числа   |" << std::endl;
-  std::cout << "|------------------------|" << std::endl;
-  std::cout << "|[0] - Вернуться назад   |" << std::endl;
-  std::cout << "|------------------------|" << std::endl;
   }
-  private:
-  Data *data_;
 };
 
 class DeleteScreen : public IScreen {
  public:
-  DeleteScreen(Data *data) : data_(data) {}
+  DeleteScreen() {}
   ~DeleteScreen() {}
   void paint() override {
   std::cout << "|------------------------|" << std::endl;
@@ -77,64 +59,45 @@ class DeleteScreen : public IScreen {
   std::cout << "|[0] - Вернуться назад   |" << std::endl;
   std::cout << "|------------------------|" << std::endl;
   }
- private:
-  Data *data_;
 };
 
 class StartScreen : public IScreen {
   public:
-  StartScreen(Data *data) : data_(data) {}
+  StartScreen() {}
   ~StartScreen() {}
   void paint() override {
   std::cout << "|------------------------|" << std::endl;
   std::cout << "|                        |" << std::endl;
-  std::cout << "|     Начатые задачи     |" << std::endl;
+  std::cout << "|       Ваши задачи      |" << std::endl;
   std::cout << "|                        |" << std::endl;
   std::cout << "|------------------------|" << std::endl;
   std::cout << std::endl << std::endl;
   std::cout << "|[0] - Вернуться назад   |" << std::endl;
   std::cout << "|------------------------|" << std::endl;
   }
- private:
-  Data *data_;
-};
-
-class FinishedScreen : public IScreen {
-  public:
-  FinishedScreen(Data *data) : data_(data) {}
-  ~FinishedScreen() {}
-  void paint() override {
-  std::cout << "|------------------------|" << std::endl;
-  std::cout << "|                        |" << std::endl;
-  std::cout << "|   Законченые задачи    |" << std::endl;
-  std::cout << "|                        |" << std::endl;
-  std::cout << "|------------------------|" << std::endl;
-  std::cout << std::endl << std::endl;
-  std::cout << "|[0] - Вернуться назад   |" << std::endl;
-  std::cout << "|------------------------|" << std::endl;
-  }
- private:
-  Data *data_;
 };
 
 class View {
  public:
   View() {
-    data_ = new Data;
     mainSc = new MainScreen;
-    addSc = new AddScreen(data_);
-    deleteSc = new DeleteScreen(data_);
-    startSc = new StartScreen(data_);
-    finishSc = new FinishedScreen(data_);
+    addSc = new AddScreen;
+    deleteSc = new DeleteScreen;
+    startSc = new StartScreen;
+  }
+
+  View(Controller *controller) : controller_(controller) {
+    mainSc = new MainScreen;
+    addSc = new AddScreen;
+    deleteSc = new DeleteScreen;
+    startSc = new StartScreen;
   }
 
   ~View() {
-    delete finishSc;
     delete startSc;
     delete deleteSc;
     delete addSc;
     delete mainSc;
-    delete data_;
   }
 
   void print_main() {
@@ -150,8 +113,36 @@ class View {
     startSc->paint();
   }
 
-  void print_finished() {
-    finishSc->paint();
+  void show_menu() {
+    while(1) {
+      print_main();
+      std::cout << "Ваш выбор: ";
+      char choice = ' ';
+      std::cin >> choice;
+      if (choice == '1') {
+        system("clear");
+        
+        std::string name;
+        std::cout << "Введите вашу задачу: ";
+        getline(std::cin, name); // пропуск переноса после предыдущего cin
+        getline(std::cin, name);
+        controller_->add_task(name);
+
+        system("pause");
+
+
+      } else if (choice == '2') {
+
+      } else if (choice == '3') {
+
+      } else if (choice == '4') {
+
+      } else if (choice == '5') {
+
+      } else if (choice == 'x') {
+        exit(1);
+      }
+    }
   }
 
  private:
@@ -159,7 +150,5 @@ class View {
   AddScreen *addSc;
   DeleteScreen *deleteSc;
   StartScreen *startSc;
-  FinishedScreen *finishSc;
-  Data *data_;
-
+  Controller *controller_;
 };
