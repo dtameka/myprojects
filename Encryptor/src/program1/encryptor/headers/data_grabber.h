@@ -1,32 +1,31 @@
 #ifndef DATA_GRABBER_H_
 #define DATA_GRABBER_H_
 
-#include <iostream>
 #include <cstring>
+#include <iostream>
 #include <vector>
 
 #include "../../interfaces/interfaces_for_grabber.h"
 
 class DataGrabber : public IDataGrabber {
-public:
+ public:
+  DataGrabber() = default;
 
-DataGrabber() = default;
+  explicit DataGrabber(std::string &main_buffer);
 
-explicit DataGrabber(std::string &main_buffer);
+  ~DataGrabber() { input_str_.clear(); }
 
-~DataGrabber() { input_str_.clear(); }
+  int getResult() override;
 
-int getResult() override;
+  void setData(std::string &main_buffer) override;
 
-void setData(std::string &main_buffer) override;
+  void printData() override;
 
-void printData() override;
+  void parseData() override;
 
-void parseData() override;
-
-private:
-    std::string input_str_{};
-    int output_ = 0;
+ private:
+  std::string input_str_{};
+  int output_ = 0;
 };
 
-#endif // DATA_GRABBER_H_
+#endif  // DATA_GRABBER_H_

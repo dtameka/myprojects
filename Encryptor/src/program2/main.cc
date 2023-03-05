@@ -1,7 +1,7 @@
 #include "server/headers/server.h"
 
 int main() {
-    Server server;
+  Server server;
 
-    server.startServer();
+  server.startServer();
 }

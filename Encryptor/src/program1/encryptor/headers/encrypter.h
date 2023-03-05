@@ -1,47 +1,46 @@
 #ifndef ENCRYPTER_H_
 #define ENCRYPTER_H_
 
-#include <iostream>
-#include <cstring>
-#include <vector>
 #include <algorithm>
+#include <cstring>
+#include <iostream>
+#include <vector>
 
 #include "../../interfaces/interfaces_for_encrypter.h"
 
 class Encrypter : public IPreparator, public IEncrypter {
-public:
+ public:
+  Encrypter() = default;
+  explicit Encrypter(std::string &main_buffer);
+  ~Encrypter();
 
-Encrypter() = default;
-explicit Encrypter(std::string &main_buffer);
-~Encrypter();
+  bool setData() override;
+  void bindBuffer(std::string &main_buffer) override;
+  void startEncrypt() override;
 
-bool setData() override;
-void bindBuffer(std::string &main_buffer) override;
-void startEncrypt() override;
+ private:
+  void setDefaultForStrings();
 
-private:
+  // сортируем полученный массив
+  void sort() override;
 
-void setDefaultForStrings();
+  // Шифрует чётные значения и погружает всё в выходной буффер в виде строки.
+  void encryptArray();
 
-// сортируем полученный массив
-void sort() override;
+  // Переводит полученную строку в массив интов.
+  void parseEnter() override;
 
-// Шифрует чётные значения и погружает всё в выходной буффер в виде строки.
-void encryptArray();
+  // Проверка, что массив состоит исключитеьно из чисел(нету поддержки ввода со
+  // знаком "+1/-1")
+  bool isNumeric();
 
-// Переводит полученную строку в массив интов.
-void parseEnter() override;
+  int validateEnter() override;
 
-// Проверка, что массив состоит исключитеьно из чисел(нету поддержки ввода со знаком "+1/-1")
-bool isNumeric();
+  std::string *p_main_buffer_ = nullptr;
 
-int validateEnter() override;
-
-std::string *p_main_buffer_ = nullptr;
-
-std::string input_str_{};
-std::vector<int> int_str_{};
-bool want_exit = false;
+  std::string input_str_{};
+  std::vector<int> int_str_{};
+  bool want_exit = false;
 };
 
-#endif // ENCRYPTER_H_
+#endif  // ENCRYPTER_H_

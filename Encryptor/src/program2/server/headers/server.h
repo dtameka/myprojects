@@ -1,11 +1,12 @@
 #ifndef SERVER_H_
 #define SERVER_H_
 
-#include <iostream>
-#include <cstring>
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <unistd.h>
+
+#include <cstring>
+#include <iostream>
 
 #include "../../interfaces/interfaces_for_server.h"
 
@@ -14,39 +15,36 @@
 
 class Server : IServer {
  public:
+  Server() = default;
+  ~Server();
 
-Server() = default;
-~Server();
+  void startServer() override;
 
-void startServer() override;
+  void sendData() override {}
 
-void sendData() override {}
+  void receiveData() override;
 
-void receiveData() override;
+ private:
+  void createSocket() override;
+  void setServerAddress() override;
 
-private:
-void createSocket() override;
-void setServerAddress() override;
+  void bindSocket() override;
 
-void bindSocket() override;
+  void startListening() override;
 
-void startListening() override;
+  void acceptConnection() override;
 
-void acceptConnection() override;
+  void startConfiguration();
 
-void startConfiguration();
+  void dataProcessing();
 
-
-void dataProcessing();
-
-
-int connection_ = 0;
-int server = 0;
-struct sockaddr_in server_address_;
-int buffer = 0;
-bool connection_check_ = false;
-bool configuration_check_ = false;
-bool server_stop_check_ = false;
+  int connection_ = 0;
+  int server = 0;
+  struct sockaddr_in server_address_;
+  int buffer = 0;
+  bool connection_check_ = false;
+  bool configuration_check_ = false;
+  bool server_stop_check_ = false;
 };
 
-#endif // SERVER_H_
+#endif  // SERVER_H_

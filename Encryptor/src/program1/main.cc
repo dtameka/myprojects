@@ -1,19 +1,15 @@
 #include "facade/programFacade.h"
 
 int main() {
-    std::string main_buffer{};
-    ProgramFacade program(main_buffer);
+  std::string main_buffer{};
+  ProgramFacade program(main_buffer);
 
-    std::thread t1([&]() {
-        program.start();
-    });
-    
-     std::thread t2([&]() {
-        program.sendData();
-     });
+  std::thread t1([&]() { program.start(); });
 
-    t1.join();
-    t2.join();
+  std::thread t2([&]() { program.sendData(); });
 
-    return 0;
+  t1.join();
+  t2.join();
+
+  return 0;
 }
